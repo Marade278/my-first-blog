@@ -3,11 +3,17 @@
 {% block content %}
     {% for post in posts %}
         <div class="post">
+            <aside class="actions">
+                <form method="POST" action="{% url 'post_publish' pk=post.pk %}" class="post-form">{% csrf_token %}
+                    <button type="submit" class="post btn btn-info" name="publish">Publish</button>
+                </form>
+            </aside>
             <p class="date">created: {{ post.created_date|date:'d-m-Y' }}</p>
             <h1>
                 <a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a>
             </h1>
-            <p>{{ post.text|truncatechars:200 }}</p>
+            <p>{{ post.text|truncatechars:10 }}</p>
         </div>
+        
     {% endfor %}
 {% endblock %}
