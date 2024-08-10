@@ -14,6 +14,7 @@
                         </button>
                     </form>        
                 {% endif %}
+            </div>   
             
                 {% if post.published_date %}
                     <div class="date">
@@ -21,14 +22,41 @@
                     </div>
                 {% else %}
                     <form method="POST" action="{% url 'post_publish' pk=post.pk %}" class="post-form">{% csrf_token %}
-                        <button type="submit" class="post btn btn-info" name="publish">Publish</button>
+                        <button type="submit" class="btn btn-info" name="publish">Publish</button>
                     </form>
-                {% endif %}
-            </div>
+                {% endif %} 
         </aside>
                
         <h2>{{ post.title }}</h2>
         <p>{{ post.text|linebreaks }}</p>
-    </article> 
+    </article>
     
+    <a id="com" href="{% url 'add_comment_to_post' pk=post.pk %}">
+        <button type="button" id="com" name="add comment">Add comment</button></a>
+    
+    
+    <hr id="draftstop">
+    {% for comment in post.comments.all %}
+        {% if user.is_authenticated or comment.approved_comment %}
+        <strong> Author: {{ comment.author }}</strong>
+        <p>{{ comment.text|linebreaks }}</p>
+        <div class="comment">
+            <div class="date">
+                {{ comment.created_date }}
+                {% if not comment.approved_comment %}
+                    <a class="btn btn-default" href="{% url 'comment_remove' pk=comment.pk %}">
+                        {% include './icons/hand-thumbs-down.svg' %}
+                    </a>
+                    <a class="btn btn-default" href="{% url 'comment_approve' pk=comment.pk %}">
+                        {% include './icons/hand-thumbs-up.svg' %}
+                    </a>
+                {% endif %}
+            </div>
+            <hr id="draftstop">
+        </div>
+        {% endif %}
+    {% empty %}
+        <p>No comments here yet :(</p>
+    {% endfor %}
+
 {% endblock %}

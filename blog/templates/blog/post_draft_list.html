@@ -8,12 +8,13 @@
                     <button type="submit" class="post btn btn-info" name="publish">Publish</button>
                 </form>
             </aside>
-            <p class="date">created: {{ post.created_date|date:'d-m-Y' }}</p>
+            
             <h1>
                 <a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a>
             </h1>
-            <p>{{ post.text|truncatechars:10 }}</p>
+            <p>{{ post.text|truncatechars:100 }}</p>
         </div>
-        
+        <p class="date">created: {{ post.created_date|date:'d-m-Y' }}</p>
+        <hr id="draftstop">
     {% endfor %}
 {% endblock %}
